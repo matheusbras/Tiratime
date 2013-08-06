@@ -107,6 +107,9 @@ var TiraTime = {
       this.sortTeams();
       this.showTeams();
     } else {
+      if((this.currentPlayer + 1) == this.numberOfPlayers) {
+        $("#second-step-submit").val("Tirar os times");
+      }
       this.trackProgress();
       this.nextPlayerInput();
       $("#second-step .fields input").focus();
