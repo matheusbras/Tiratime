@@ -4,35 +4,25 @@ title: Tiratime
 ---
 
 <div id="first-step">
-  <div class="options">
-    <input type="checkbox" name="goalkeepers" id="goalkeepers" />
-    <label for="goalkeepers">Vão ter goleiros fixos?</label>
-  </div>
-
-  <div id="alternate-fields" class="fields">
-    <input type="text" name="goalkeepers_number" placeholder="Número de Goleiros" />
-    <input type="text" name="players_without_goalkeepers" placeholder="Número de Jogadores na Linha" />
-  </div>
-
   <div id="regular-fields" class="fields">
-    <input type="text" name="players_with_goalkeepers" placeholder="Número de Jogadores por Time c/ Goleiros" />
-    <input type="text" name="teams_number" placeholder="Número de Times" />
+    <input type="text" name="players_with_goalkeepers" id="number-of-players" placeholder="Número de Jogadores" />
+    <input type="text" name="teams_number" id="number-of-teams" placeholder="Número de Times" />
   </div>
 
-  <input type="submit" value="Próximo Passo" class="button" />
+  <input type="submit" value="Próximo Passo" class="button" id="first-step-submit" />
 </div>
 
-<!-- <div id="second-step">
+<div id="second-step">
   <header>
-    <h1>Goleiros <span>1/2</span></h1>
+    <h1>Jogador <span id="current-player"></span>/<span id="total-players"></span></h1>
   </header>
 
   <div class="fields">
-    <input type="text" name="goalkeeper" placeholder="Nome do Goleiro" />
+    
   </div>
 
-  <input type="submit" value="Próximo Goleiro" class="button" />
-</div> -->
+  <input type="submit" value="Próximo Jogador" class="button" id="second-step-submit" />
+</div>
 
 <!-- <div id="final-step">
   <div class="team">
