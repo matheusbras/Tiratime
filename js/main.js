@@ -4,9 +4,9 @@ var TiraTime = {
   playersNames: [],
   playersInputObjects: [],
   currentPlayer: 0,
+  teams: [],
 
   initialize: function() {
-    console.log("Initializing")
     this.firstStepSetup();
   },
 
@@ -103,10 +103,9 @@ var TiraTime = {
   },
 
   secondStepSubmit: function() {
-    if((this.currentPlayer + 1) >= this.numberOfPlayers) {
-      // TODO: Make the sorting. Maybe use Ruby.js
-      // this.sortTeams();
-      // this.showTeams();
+    if((this.currentPlayer + 1) > this.numberOfPlayers) {
+      this.sortTeams();
+      this.showTeams();
     } else {
       this.trackProgress();
       this.nextPlayerInput();
@@ -114,7 +113,28 @@ var TiraTime = {
     }
   },
 
+  sortTeams: function() {
+    var namesArray = this.playersNames;
+    while(namesArray.length > 0) {
+      for(var i = 0; i < this.numberOfTeams; i++) {
+        this.teams[i] = { team_number: i+1, players: []};
+        for(var j = 0; j < (this.numberOfPlayers/this.numberOfTeams); j++) {
+          shuffle(namesArray);
+          this.teams[i].players.push({ name: namesArray.pop()});
+        }
+      }
+    }
+  },
 
+  showTeams: function() {
+    $("#second-step").hide();
+    var source = "{{#each teams}}<div class='team'><header><h1>Time {{team_number}}</h1></header><ul>{{#each players}}<li>{{name}}<li>{{/each}}</ul></div>{{/each}}";
+    var template = Handlebars.compile(source);
+    var compiledTemplate = template({ teams: this.teams });
+    $("#final-step").html(compiledTemplate).show();
+  }
 };
 
 TiraTime.initialize();
+MBP.hideUrlBarOnLoad();
+MBP.startupImage();
