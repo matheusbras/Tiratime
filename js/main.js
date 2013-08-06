@@ -92,6 +92,8 @@ var TiraTime = {
     this.setFirstPlayerInput();
     $("#second-step").show();
 
+    $("#second-step .fields input").focus();
+
     var that = this;
 
     $("#second-step-submit").on("click", function(e) {
@@ -108,6 +110,7 @@ var TiraTime = {
     } else {
       this.trackProgress();
       this.nextPlayerInput();
+      $("#second-step .fields input").focus();
     }
   },
 
