@@ -266,6 +266,10 @@ body {
   margin-bottom: 10px;
 }
 
+.fields input.invalid {
+  border: #820002 1px solid;
+}
+
 .button {
   padding: 15px 10px;
   background: #022f00 !important;
@@ -276,6 +280,10 @@ body {
   width: 100%;
   font-weight: bold;
   font-size: 18px;
+}
+
+#second-step {
+  display: none;
 }
 
 #second-step header {
