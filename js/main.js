@@ -10,6 +10,18 @@ var TiraTime = {
     this.firstStepSetup();
   },
 
+  reset: function() {
+    this.numberOfPlayers = 0;
+    this.numberOfTeams = 0;
+    this.playersNames = [];
+    this.playersInputObjects = [];
+    this.currentPlayer = 0;
+    this.teams = [];
+    $("#second-step, #final-step").hide();
+    $("#first-step").show();
+    $("#number-of-teams, #number-of-players").val("");
+  },
+
   validateFirstStep: function() {
     var teamsInput = $("#number-of-teams"),
         playersInput = $("#number-of-players"),
