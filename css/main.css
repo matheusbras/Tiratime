@@ -68,27 +68,6 @@ textarea {
 }
 
 /* ==========================================================================
-   Author's custom styles
-   ========================================================================== */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* ==========================================================================
    Helper classes
    ========================================================================== */
 
@@ -241,15 +220,8 @@ body {
   padding: 0 20px;
 }
 
-.options {
-  font-size: 21px;
-  font-weight: bold;
-  color: #fff;
-  text-align: center;
-}
-
-#alternate-fields {
-  display: none;
+#first-step {
+  margin-top: 80px;
 }
 
 .fields {
@@ -264,6 +236,8 @@ body {
   background: #fff;
   width: 100%;
   margin-bottom: 10px;
+  text-align: center;
+  box-sizing: border-box;
 }
 
 .fields input.invalid {
@@ -291,6 +265,11 @@ body {
   font-size: 15px;
   font-weight: bold;
   color: #fff;
+}
+
+#final-step {
+  display: none;
+  margin-bottom: 30px;
 }
 
 .team {
