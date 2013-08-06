@@ -205,13 +205,14 @@ body {
 }
 
 #header {
-  width: 110px;
-  background: #212121;
-  padding: 5px 10px;
+  width: 150px;
   color: #fff;
   text-align: center;
   margin: 20px auto;
-  font-size: 10px;
+}
+
+#header img {
+  width: 100%;
 }
 
 .container {
@@ -221,7 +222,7 @@ body {
 }
 
 #first-step {
-  margin-top: 80px;
+  margin-top: 60px;
 }
 
 .fields {
