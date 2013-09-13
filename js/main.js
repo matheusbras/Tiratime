@@ -1,28 +1,24 @@
-var TiraTime = {
-  numberOfTeams: 0,
-  numberOfPlayers: 0,
-  playersNames: [],
-  playersInputObjects: [],
-  currentPlayer: 0,
-  teams: [],
+var TiraTime = (function(){
+  var numberOfTeams, numberOfPlayers, playersNames = [],
+      playersInputObjects = [], currentPlayer = 0, teams = []
+      _this = this;
 
-  initialize: function() {
-    this.firstStepSetup();
-  },
+  function TiraTime() {
+    addEventListeners();
+  };
 
-  reset: function() {
-    this.numberOfPlayers = 0;
-    this.numberOfTeams = 0;
-    this.playersNames = [];
-    this.playersInputObjects = [];
-    this.currentPlayer = 0;
-    this.teams = [];
-    $("#second-step, #final-step").hide();
-    $("#first-step").show();
-    $("#number-of-teams, #number-of-players").val("");
-  },
+  function addEventListeners() {
+    $("#first-step-submit").on("click", onFirstStepSubmit);
+    $("#second-step-submit").on("click", onSecondStepSubmit);
+    $("#final-step").on("click", "input", onReSortTeams);
+  };
 
-  validateFirstStep: function() {
+  function onFirstStepSubmit(e) {
+    e.preventDefault();
+    if(validateFirstStep()) callSecondStep();
+  };
+
+  function validateFirstStep() {
     var teamsInput = $("#number-of-teams"),
         playersInput = $("#number-of-players"),
         valid = false;
@@ -32,124 +28,116 @@ var TiraTime = {
 
     if(!teamsInput.val()) {
       teamsInput.addClass("invalid");
-    }
+    };
 
     if(!playersInput.val()) {
       playersInput.addClass("invalid");
-    }
+    };
 
     if(playersInput.val() && teamsInput.val()) {
-      this.numberOfTeams = teamsInput.val();
-      this.numberOfPlayers = playersInput.val();
+      numberOfTeams = teamsInput.val();
+      numberOfPlayers = playersInput.val();
       valid = true;
-    }
+    };
 
     return valid;
-  },
+  };
 
-  buildPlayersInputs: function() {
-    var that = this;
-    for(var i = 0; i < that.numberOfPlayers; i++) {
-      that.playersInputObjects.push({ name: "player["+(i+1)+"]", placeholder: "Jogador " + (i+1) });
-    }
-  },
+  function callSecondStep() {
+    $("#first-step").hide();
 
-  setFirstPlayerInput: function() {
-    var player = this.playersInputObjects[0];
-    var firstPlayerInput = "<input type='text' name='"+player.name+ "' placeholder='"+player.placeholder+"'/>";
-    $("#second-step .fields").html(firstPlayerInput);
-  },
+    trackProgress();
+    buildPlayersInputs();
+    setPlayerInput();
 
-  nextPlayerInput: function() {
-    var player = this.playersInputObjects[this.currentPlayer];
-    var playerInput = "<input type='text' name='"+player.name+ "' placeholder='"+player.placeholder+"'/>";
-    $("#second-step .fields").html(playerInput);
-  },
+    $("#second-step").show();
+    $("#second-step .fields input").focus();
+  };
 
-  trackProgress: function() {
-    $("#current-player").text(this.currentPlayer + 1);
-    $("#total-players").text(this.numberOfPlayers);
-  },
+  function onSecondStepSubmit(e) {
+    e.preventDefault();
+    if(validateSecondStep()) secondStepSubmit();
+  };
 
-  validateSecondStep: function(input) {
+  function validateSecondStep() {
+    $input = $("#second-step .fields input");
     var valid = false;
 
-    input.removeClass("invalid");
+    $input.removeClass("invalid");
 
-    if(!input.val()) {
-      input.addClass("invalid");
+    if(!$input.val()) {
+      $input.addClass("invalid");
     } else {
-      this.playersNames.push(input.val());
-      this.currentPlayer++;
+      playersNames.push($input.val());
+      currentPlayer++;
       valid = true;
-    }
-
-    console.log(this.playersNames);
+    };
 
     return valid;
-  },
+  };
 
-  firstStepSetup: function() {
-    var that = this;
-    $("#first-step-submit").on("click", function(e){
-      e.preventDefault();
-      if(that.validateFirstStep()) that.secondStep();
-    });
-  },
-
-  secondStep: function() {
-    $("#first-step").hide();
-    this.trackProgress();
-    this.buildPlayersInputs();
-    this.setFirstPlayerInput();
-    $("#second-step").show();
-
-    $("#second-step .fields input").focus();
-
-    var that = this;
-
-    $("#second-step-submit").on("click", function(e) {
-      e.preventDefault();
-      if(that.validateSecondStep($("#second-step .fields input"))) that.secondStepSubmit();
-    })
-  },
-
-  secondStepSubmit: function() {
-    if((this.currentPlayer + 1) > this.numberOfPlayers) {
-      this.sortTeams();
-      this.showTeams();
+  function secondStepSubmit() {
+    if((currentPlayer + 1) > numberOfPlayers) {
+      sortTeams();
+      showTeams();
     } else {
-      if((this.currentPlayer + 1) == this.numberOfPlayers) {
+      if((currentPlayer + 1) == numberOfPlayers) {
         $("#second-step-submit").val("Tirar os times");
-      }
-      this.trackProgress();
-      this.nextPlayerInput();
+      };
+      trackProgress();
+      setPlayerInput();
       $("#second-step .fields input").focus();
     }
-  },
+  };
 
-  sortTeams: function() {
-    var namesArray = this.playersNames;
+  function trackProgress() {
+    $("#current-player").text(currentPlayer + 1);
+    $("#total-players").text(numberOfPlayers);
+  };
+
+  function buildPlayersInputs() {
+    for(var i = 0; i < numberOfPlayers; i++) {
+      playersInputObjects.push({ name: "player["+(i+1)+"]", placeholder: "Jogador " + (i+1) });
+    }
+  };
+
+  function setPlayerInput(index) {
+    var player = playersInputObjects[currentPlayer];
+    var playerInput = "<input type='text' name='"+player.name+ "' placeholder='"+player.placeholder+"'/>";
+    $("#second-step .fields").html(playerInput);
+  };
+
+  function sortTeams() {
+    teams = [];
+    var namesArray = playersNames.slice(0);
     while(namesArray.length > 0) {
-      for(var i = 0; i < this.numberOfTeams; i++) {
-        this.teams[i] = { team_number: i+1, players: []};
-        for(var j = 0; j < (this.numberOfPlayers/this.numberOfTeams); j++) {
+      for(var i = 0; i < numberOfTeams; i++) {
+        teams[i] = { team_number: i+1, players: []};
+        for(var j = 0; j < (numberOfPlayers/numberOfTeams); j++) {
           shuffle(namesArray);
-          this.teams[i].players.push({ name: namesArray.pop()});
+          teams[i].players.push({ name: namesArray.pop()});
         }
       }
-    }
-  },
+    };
+  };
 
-  showTeams: function() {
+  function showTeams() {
+    console.log(teams);
     $("#second-step").hide();
-    var source = "{{#each teams}}<div class='team'><header><h1>Time {{team_number}}</h1></header><ul>{{#each players}}<li>{{name}}<li>{{/each}}</ul></div>{{/each}}";
+    var source = "{{#each teams}}<div class='team'><header><h1>Time {{team_number}}</h1></header><ul>{{#each players}}<li>{{name}}<li>{{/each}}</ul></div>{{/each}} <input type='submit' value='Tirar Novamente' class='button' id='re-sort-teams' />";
     var template = Handlebars.compile(source);
-    var compiledTemplate = template({ teams: this.teams });
+    var compiledTemplate = template({ teams: teams });
     $("#final-step").html(compiledTemplate).show();
-  }
-};
+  };
 
-TiraTime.initialize();
+  function onReSortTeams() {
+    sortTeams();
+    showTeams();
+  };
+
+  return TiraTime;
+}());
+
+new TiraTime();
 MBP.hideUrlBarOnLoad();
 MBP.startupImage();
